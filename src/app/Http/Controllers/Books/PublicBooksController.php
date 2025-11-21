@@ -19,7 +19,7 @@ class PublicBooksController extends Controller
             ->orderByDesc('created_at')
             ->get();
 
-        return Inertia::render('public-books', [
+        return Inertia::render('PublicBooksView', [
             'owner' => [
                 'id' => $user->id,
                 'name' => $user->name,

@@ -11,16 +11,14 @@ use Inertia\Response;
 
 class MyBooksController extends Controller
 {
-    public function __construct(private readonly UserBookSearchService $searchService)
-    {
-    }
+    public function __construct(private readonly UserBookSearchService $searchService) {}
 
     public function index(Request $request): Response
     {
         $user = $request->user();
         $paginator = $this->searchService->search($user, $request->query('q'));
 
-        return Inertia::render('me/books', [
+        return Inertia::render('MyBooksView', [
             'books' => [
                 'data' => UserBookResource::collection($paginator->items())->toArray($request),
                 'meta' => [

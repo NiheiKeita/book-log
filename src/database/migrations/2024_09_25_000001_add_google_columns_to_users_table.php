@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::table('users', function (Blueprint $table) {
             if (!Schema::hasColumn('users', 'google_sub')) {
-                $table->string('google_sub')->unique()->after('email');
+                $table->string('google_sub')->nullable()->unique()->after('email');
             }
             if (!Schema::hasColumn('users', 'image_url')) {
                 $table->string('image_url')->nullable()->after('google_sub');

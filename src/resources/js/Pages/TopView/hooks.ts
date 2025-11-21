@@ -3,7 +3,9 @@ import { router } from '@inertiajs/react'
 import type { PageProps } from '~/types'
 
 export type TopViewProps = {
-    loginUrl: string
+    googleLoginUrl: string
+    emailLoginUrl: string
+    registerUrl: string
 }
 
 export type Feature = {
@@ -15,6 +17,8 @@ export type UseTopViewResult = {
     features: Feature[]
     loginLabel: string
     onPrimaryAction: () => void
+    onEmailLogin: () => void
+    onRegister: () => void
     isLoggedIn: boolean
     authError: string | null
 }
@@ -25,7 +29,6 @@ export const formatHeroMessage = (isLoggedIn: boolean): string => {
 
 export const useTopView = (props: PageProps<TopViewProps>): UseTopViewResult => {
     const isLoggedIn = Boolean(props.auth?.user)
-    const loginUrl = props.loginUrl
 
     const features = useMemo<Feature[]>(() => ([
         { title: 'ISBN13からワンクリック登録', description: 'openBD・Google Books APIから書籍情報を自動取得します。' },
@@ -43,7 +46,19 @@ export const useTopView = (props: PageProps<TopViewProps>): UseTopViewResult => 
                 router.visit(route('me.books'))
                 return
             }
-            window.location.href = loginUrl
+            window.location.href = props.googleLoginUrl
+        },
+        onEmailLogin: () => {
+            router.visit(props.emailLoginUrl)
+            if (typeof window !== 'undefined') {
+                window.location.href = props.emailLoginUrl
+            }
+        },
+        onRegister: () => {
+            router.visit(props.registerUrl)
+            if (typeof window !== 'undefined') {
+                window.location.href = props.registerUrl
+            }
         },
     }
 }

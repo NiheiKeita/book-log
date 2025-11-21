@@ -16,7 +16,13 @@ createInertiaApp({
     title: (title) => `${title} ${appName}`,
     resolve: (name) => {
         if (name.startsWith('views/')) {
-            return resolvePageComponent(`./${name}/index.tsx`, viewPages)
+            const viewPath = `./${name}/index.tsx`
+            if (viewPages[viewPath]) {
+                return resolvePageComponent(viewPath, viewPages)
+            }
+
+            const legacyName = name.replace(/^views\//, '')
+            return resolvePageComponent(`./Pages/${legacyName}/index.tsx`, legacyPages)
         }
 
         const appPath = `./app/${name}.tsx`

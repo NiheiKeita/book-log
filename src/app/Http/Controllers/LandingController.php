@@ -10,7 +10,9 @@ class LandingController extends Controller
     public function __invoke(): Response
     {
         return Inertia::render('TopView', [
-            'loginUrl' => route('auth.google'),
+            'googleLoginUrl' => route('auth.google'),
+            'emailLoginUrl' => route('login'),
+            'registerUrl' => route('register'),
         ]);
     }
 }

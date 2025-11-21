@@ -14,13 +14,11 @@ use Inertia\Response;
 
 class BookRegistrationController extends Controller
 {
-    public function __construct(private readonly BookLookupService $bookLookupService)
-    {
-    }
+    public function __construct(private readonly BookLookupService $bookLookupService) {}
 
     public function create(Request $request): Response
     {
-        return Inertia::render('books/register', [
+        return Inertia::render('BookRegisterView', [
             'prefillIsbn' => $request->input('isbn13'),
         ]);
     }

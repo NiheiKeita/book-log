@@ -1,26 +1,6 @@
 #コーディングルール（ディレクトリ構成と責務）
-## 1. app ディレクトリ
-役割: URLルーティングのエントリーポイントだけを書く
-書かないこと: ロジック・表示処理・JSX は書かない
-やること: 対応する views を読み込むだけ
-例: /app/top.tsx
-```tsx
-import { TopView } from '~/views/TopView';
-export default TopView;
-```
-
-## 2. views ディレクトリ
-役割: ページ単位のロジックと表示を担当
-
-構成:
-
-index.tsx: ページ全体のコンポーネント
-hooks.ts: ロジック（カスタムフック）を定義
-components/: UI部品を切り出す
-index.stories.tsx: Storybook カタログ + 必要なUIテスト
-hooks.test.ts: hooks.ts のユニットテスト
-
-例: /views/TopView/
+# Pagesディレクトリ
+ここにコントローラで指定した画面を入れます
 
 ```
 TopView/
