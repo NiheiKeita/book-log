@@ -26,7 +26,20 @@ class BookLookupService
 
     private function fetchMetadata(string $isbn13): ?array
     {
-        return $this->fetchFromOpenBd($isbn13) ?? $this->fetchFromGoogleBooks($isbn13);
+        $openbd = $this->fetchFromOpenBd($isbn13);
+        $google = null;
+
+        if ($openbd) {
+            if (!empty($openbd['image_url'])) {
+                return $openbd;
+            }
+            $google = $this->fetchFromGoogleBooks($isbn13, false);
+            if ($google) {
+                return array_merge($openbd, array_filter($google, fn ($value) => $value !== null));
+            }
+        }
+
+        return $openbd ?? $this->fetchFromGoogleBooks($isbn13);
     }
 
     private function fetchFromOpenBd(string $isbn13): ?array
@@ -59,7 +72,7 @@ class BookLookupService
         );
     }
 
-    private function fetchFromGoogleBooks(string $isbn13): ?array
+    private function fetchFromGoogleBooks(string $isbn13, bool $requireTitle = true): ?array
     {
         $response = Http::timeout(10)->get('https://www.googleapis.com/books/v1/volumes', [
             'q' => sprintf('isbn:%s', $isbn13),
@@ -74,7 +87,8 @@ class BookLookupService
             return null;
         }
 
-        $volumeInfo = $body['items'][0]['volumeInfo'] ?? null;
+        $volume = $body['items'][0] ?? null;
+        $volumeInfo = $volume['volumeInfo'] ?? null;
         if (!$volumeInfo) {
             return null;
         }
@@ -86,7 +100,8 @@ class BookLookupService
             $authors ? implode(', ', $authors) : null,
             $volumeInfo['publisher'] ?? null,
             $this->extractYear($volumeInfo['publishedDate'] ?? null),
-            $volumeInfo['imageLinks']['thumbnail'] ?? ($volumeInfo['imageLinks']['smallThumbnail'] ?? null),
+            $this->resolveGoogleImageUrl($volume),
+            $requireTitle,
         );
     }
 
@@ -104,10 +119,10 @@ class BookLookupService
         return null;
     }
 
-    private function buildPayload(?string $title, ?string $author, ?string $publisher, ?string $publishedYear, ?string $imageUrl): ?array
+    private function buildPayload(?string $title, ?string $author, ?string $publisher, ?string $publishedYear, ?string $imageUrl, bool $requireTitle = true): ?array
     {
         $safeTitle = $title ? trim($title) : null;
-        if (!$safeTitle) {
+        if ($requireTitle && !$safeTitle) {
             return null;
         }
 
@@ -128,5 +143,28 @@ class BookLookupService
         }
 
         return $digits;
+    }
+
+    private function resolveGoogleImageUrl(?array $volume): ?string
+    {
+        if (!$volume) {
+            return null;
+        }
+
+        $imageLinks = $volume['volumeInfo']['imageLinks'] ?? [];
+        $imageUrl = $imageLinks['thumbnail'] ?? ($imageLinks['smallThumbnail'] ?? null);
+        if ($imageUrl) {
+            return $imageUrl;
+        }
+
+        $volumeId = $volume['id'] ?? null;
+        if ($volumeId) {
+            return sprintf(
+                'https://books.google.com/books/content?id=%s&printsec=frontcover&img=1&zoom=1&source=gbs_api',
+                urlencode($volumeId),
+            );
+        }
+
+        return null;
     }
 }
