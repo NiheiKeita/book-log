@@ -1,11 +1,31 @@
 import type { FormEvent } from 'react'
 import type { PageProps } from '~/types'
 import { BookRow } from './components/BookRow'
+import { CandidateCard } from './components/CandidateCard'
 import type { MyBooksViewProps } from './hooks'
 import { useMyBooks } from './hooks'
 
 export const MyBooksView = (props: PageProps<MyBooksViewProps>) => {
-    const { keyword, setKeyword, books, meta, isSearching, feedback, updatingId, onSearch, onToggleVisibility, publicCount, totalCount, user } = useMyBooks(props)
+    const {
+        keyword,
+        setKeyword,
+        books,
+        meta,
+        isSearching,
+        isRegistering,
+        feedback,
+        removingId,
+        onSearch,
+        onRemove,
+        canRegisterFromIsbn,
+        registerFromIsbn,
+        candidates,
+        registerCandidate,
+        registeringBookId,
+        publicCount,
+        totalCount,
+        user,
+    } = useMyBooks(props)
 
     const handleSubmit = (event: FormEvent) => {
         event.preventDefault()
@@ -59,9 +79,41 @@ export const MyBooksView = (props: PageProps<MyBooksViewProps>) => {
                             {isSearching ? '検索中…' : '検索'}
                         </button>
                     </form>
+                    {canRegisterFromIsbn && (
+                        <div className="mt-3 flex flex-col gap-2 rounded-lg border border-dashed border-slate-300 p-3 text-sm text-slate-600 md:flex-row md:items-center">
+                            <span>ISBN13 として認識しました。この本を読んだ履歴として追加しますか？</span>
+                            <button
+                                type="button"
+                                onClick={() => void registerFromIsbn()}
+                                className="rounded-lg bg-emerald-600 px-4 py-2 text-white transition hover:bg-emerald-500 disabled:cursor-not-allowed disabled:bg-emerald-300"
+                                disabled={isRegistering}
+                            >
+                                {isRegistering ? '記録中…' : 'この本を読んだ'}
+                            </button>
+                        </div>
+                    )}
                     {feedback && <p className="mt-3 text-sm text-slate-600">{feedback}</p>}
                     <p className="mt-4 text-sm text-slate-500">登録冊数: {meta.total} / ページ {meta.current_page}</p>
                 </section>
+
+                {candidates.length > 0 && (
+                    <section className="space-y-4 rounded-2xl bg-white p-6 shadow">
+                        <div className="flex items-center justify-between">
+                            <h2 className="text-lg font-semibold text-slate-900">候補</h2>
+                            <p className="text-xs text-slate-500">既に取得済みの書籍から表示しています</p>
+                        </div>
+                        <div className="grid gap-4 md:grid-cols-2">
+                            {candidates.map((book) => (
+                                <CandidateCard
+                                    key={book.id}
+                                    book={book}
+                                    disabled={registeringBookId === book.id}
+                                    onRegister={() => void registerCandidate(book)}
+                                />
+                            ))}
+                        </div>
+                    </section>
+                )}
 
                 <section className="space-y-4">
                     {books.length === 0 ? (
@@ -71,8 +123,8 @@ export const MyBooksView = (props: PageProps<MyBooksViewProps>) => {
                             <BookRow
                                 key={userBook.id}
                                 userBook={userBook}
-                                disabled={updatingId === userBook.id}
-                                onToggle={(next) => onToggleVisibility(userBook.id, next)}
+                                disabled={removingId === userBook.id}
+                                onRemove={() => onRemove(userBook.id)}
                             />
                         ))
                     )}

@@ -67,4 +67,17 @@ class BookRegistrationController extends Controller
             'is_public' => $userBook->is_public,
         ], $status);
     }
+
+    public function destroy(Request $request, UserBook $userBook): JsonResponse
+    {
+        if ($request->user()->id !== $userBook->user_id) {
+            abort(403, 'この本を削除する権限がありません。');
+        }
+
+        $userBook->delete();
+
+        return response()->json([
+            'message' => '登録を解除しました。',
+        ]);
+    }
 }

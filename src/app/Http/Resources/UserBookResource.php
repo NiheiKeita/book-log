@@ -16,7 +16,7 @@ class UserBookResource extends JsonResource
         return [
             'id' => $this->id,
             'is_public' => $this->is_public,
-            'book' => new BookResource($this->book),
+            'book' => (new BookResource($this->book))->toArray($request),
             'created_at' => $this->created_at?->toIso8601String(),
         ];
     }
