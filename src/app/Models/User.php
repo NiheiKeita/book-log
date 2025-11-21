@@ -2,14 +2,17 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use Illuminate\Support\Facades\DB;
 use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable
 {
     use HasApiTokens;
+    use HasFactory;
     use Notifiable;
 
     /**
@@ -20,9 +23,10 @@ class User extends Authenticatable
     protected $fillable = [
         'name',
         'email',
+        'google_sub',
         'password',
+        'image_url',
         'tel',
-        'password_token',
     ];
 
     /**
@@ -45,21 +49,13 @@ class User extends Authenticatable
         'password' => 'hashed',
     ];
 
-    protected static function boot()
+    public function userBooks(): HasMany
     {
-        parent::boot();
+        return $this->hasMany(UserBook::class);
+    }
 
-        static::updated(function ($user) {
-            // プランが変更されたかどうかを確認する
-            if ($user->isDirty('plan_id')) {
-                // プランが変更された場合、ログを保存する
-                DB::table('user_plan_logs')->insert([
-                    'user_id' => $user->id,
-                    'plan_id' => $user->plan_id,
-                    'created_at' => now(),
-                    'updated_at' => now(),
-                ]);
-            }
-        });
+    public function books(): BelongsToMany
+    {
+        return $this->belongsToMany(Book::class, 'user_books')->withPivot('is_public')->withTimestamps();
     }
 }
