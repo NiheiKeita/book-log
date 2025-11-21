@@ -108,7 +108,7 @@ export const useMyBooks = (props: PageProps<MyBooksViewProps>): UseMyBooksResult
         setBooks((prev) => [
             {
                 id: userBookId,
-                is_public: false,
+                is_public: true,
                 book,
             },
             ...prev,

@@ -14,7 +14,6 @@ class PublicBooksController extends Controller
     public function show(Request $request, User $user): Response
     {
         $userBooks = $user->userBooks()
-            ->where('is_public', true)
             ->with('book')
             ->orderByDesc('created_at')
             ->get();

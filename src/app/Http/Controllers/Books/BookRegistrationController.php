@@ -54,7 +54,7 @@ class BookRegistrationController extends Controller
                 'user_id' => $user->id,
                 'book_id' => $validated['book_id'],
             ],
-            ['is_public' => false],
+            ['is_public' => true],
         );
         $userBook->load('book');
 
