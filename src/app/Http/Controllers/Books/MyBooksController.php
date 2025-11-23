@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\BookResource;
 use App\Http\Resources\UserBookResource;
 use App\Models\Book;
+use App\Models\User;
 use App\Services\UserBookSearchService;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -13,11 +14,16 @@ use Inertia\Response;
 
 class MyBooksController extends Controller
 {
-    public function __construct(private readonly UserBookSearchService $searchService) {}
+    public function __construct(private readonly UserBookSearchService $searchService)
+    {
+    }
 
     public function index(Request $request): Response
     {
         $user = $request->user();
+        if (!$user instanceof User) {
+            abort(401);
+        }
         $paginator = $this->searchService->search($user, $request->query('q'));
         $keywordDigits = preg_replace('/[^0-9]/', '', (string) $request->query('q', ''));
         $candidateBooks = [];

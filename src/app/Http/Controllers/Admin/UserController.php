@@ -54,7 +54,7 @@ class UserController extends Controller
 
         SendMail::dispatch(new UserRegisterMail($user, $randomPassword));
 
-        return redirect(RouteServiceProvider::USERS)->with('message', '登録が完了しました');
+        return redirect()->to(RouteServiceProvider::USERS)->with('message', '登録が完了しました');
     }
 
     /**
@@ -83,6 +83,6 @@ class UserController extends Controller
             'tel' => $request->tel,
         ]);
 
-        return redirect(RouteServiceProvider::USERS)->with('message', '更新が完了しました');
+        return redirect()->to(RouteServiceProvider::USERS)->with('message', '更新が完了しました');
     }
 }

@@ -8,6 +8,9 @@ use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
 class UserBookSearchService
 {
+    /**
+     * @return LengthAwarePaginator<int, UserBook>
+     */
     public function search(User $user, ?string $keyword = null, int $perPage = 20): LengthAwarePaginator
     {
         $query = $user->userBooks()->with('book')->orderByDesc('created_at');
@@ -16,7 +19,7 @@ class UserBookSearchService
 
         if ($normalized !== '' || ($isbnDigits && strlen($isbnDigits) >= 4)) {
             $like = $normalized !== '' ? sprintf('%%%s%%', $normalized) : null;
-            $isbnLike = ($isbnDigits && strlen($isbnDigits) >= 4) ? sprintf('%%%s%%', $isbnDigits) : null;
+            $isbnLike = $isbnDigits && strlen($isbnDigits) >= 4 ? sprintf('%%%s%%', $isbnDigits) : null;
 
             $query->whereHas('book', function ($bookQuery) use ($like, $isbnLike) {
                 $bookQuery->where(function ($inner) use ($like, $isbnLike) {

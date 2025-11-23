@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class UserBook extends Model
 {
+    /** @phpstan-use \Illuminate\Database\Eloquent\Factories\HasFactory<\Database\Factories\UserBookFactory> */
     use HasFactory;
 
     /**
@@ -26,13 +27,25 @@ class UserBook extends Model
         'is_public' => 'boolean',
     ];
 
+    /**
+     * @return BelongsTo<User, static>
+     */
     public function user(): BelongsTo
     {
-        return $this->belongsTo(User::class);
+        /** @var BelongsTo<User, static> $relation */
+        $relation = $this->belongsTo(User::class);
+
+        return $relation;
     }
 
+    /**
+     * @return BelongsTo<Book, static>
+     */
     public function book(): BelongsTo
     {
-        return $this->belongsTo(Book::class);
+        /** @var BelongsTo<Book, static> $relation */
+        $relation = $this->belongsTo(Book::class);
+
+        return $relation;
     }
 }

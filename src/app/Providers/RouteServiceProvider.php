@@ -19,6 +19,11 @@ class RouteServiceProvider extends ServiceProvider
      */
     public const HOME = '/me/books';
     public const LOGIN = '/';
+    public const ADMIN_HOME = '/admin/dashboard';
+    public const ADMIN_LOGIN = '/admin/login';
+    public const ADMIN_USERS = '/admin/admin-users';
+    public const USERS = '/admin/users';
+    public const WEB_PROPERTIES = self::HOME;
 
     /**
      * Define your route model bindings, pattern filters, and other route configuration.

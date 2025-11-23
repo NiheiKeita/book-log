@@ -36,6 +36,6 @@ class AdminUserController extends Controller
             'password' => Hash::make($request->password),
         ]);
 
-        return redirect(RouteServiceProvider::ADMIN_USERS)->with('message', '登録が完了しました');
+        return redirect()->to(RouteServiceProvider::ADMIN_USERS)->with('message', '登録が完了しました');
     }
 }

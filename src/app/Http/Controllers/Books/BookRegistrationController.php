@@ -14,7 +14,9 @@ use Inertia\Response;
 
 class BookRegistrationController extends Controller
 {
-    public function __construct(private readonly BookLookupService $bookLookupService) {}
+    public function __construct(private readonly BookLookupService $bookLookupService)
+    {
+    }
 
     public function create(Request $request): Response
     {

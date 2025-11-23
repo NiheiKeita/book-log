@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Book extends Model
 {
+    /** @phpstan-use \Illuminate\Database\Eloquent\Factories\HasFactory<\Database\Factories\BookFactory> */
     use HasFactory;
 
     /**
@@ -36,13 +37,25 @@ class Book extends Model
         });
     }
 
+    /**
+     * @return HasMany<UserBook, static>
+     */
     public function userBooks(): HasMany
     {
-        return $this->hasMany(UserBook::class);
+        /** @var HasMany<UserBook, static> $relation */
+        $relation = $this->hasMany(UserBook::class);
+
+        return $relation;
     }
 
+    /**
+     * @return BelongsToMany<User, static>
+     */
     public function users(): BelongsToMany
     {
-        return $this->belongsToMany(User::class, 'user_books')->withPivot('is_public')->withTimestamps();
+        /** @var BelongsToMany<User, static> $relation */
+        $relation = $this->belongsToMany(User::class, 'user_books')->withPivot('is_public')->withTimestamps();
+
+        return $relation;
     }
 }

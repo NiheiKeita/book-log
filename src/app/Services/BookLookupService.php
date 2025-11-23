@@ -6,6 +6,16 @@ use App\Models\Book;
 use Illuminate\Support\Facades\Http;
 use RuntimeException;
 
+/**
+ * @phpstan-type BookMetadata array{
+ *     title: ?string,
+ *     author: ?string,
+ *     publisher: ?string,
+ *     published_year: ?string,
+ *     image_url: ?string
+ * }
+ */
+
 class BookLookupService
 {
     public function findOrCreate(string $isbn13): Book
@@ -24,6 +34,9 @@ class BookLookupService
         return Book::create(array_merge($metadata, ['isbn13' => $normalizedIsbn]));
     }
 
+    /**
+     * @return BookMetadata|null
+     */
     private function fetchMetadata(string $isbn13): ?array
     {
         $openbd = $this->fetchFromOpenBd($isbn13);
@@ -35,13 +48,16 @@ class BookLookupService
             }
             $google = $this->fetchFromGoogleBooks($isbn13, false);
             if ($google) {
-                return array_merge($openbd, array_filter($google, fn ($value) => $value !== null));
+                return array_merge($openbd, array_filter($google, fn($value) => $value !== null));
             }
         }
 
         return $openbd ?? $this->fetchFromGoogleBooks($isbn13);
     }
 
+    /**
+     * @return BookMetadata|null
+     */
     private function fetchFromOpenBd(string $isbn13): ?array
     {
         $response = Http::timeout(10)->get('https://api.openbd.jp/v1/get', [
@@ -72,6 +88,9 @@ class BookLookupService
         );
     }
 
+    /**
+     * @return BookMetadata|null
+     */
     private function fetchFromGoogleBooks(string $isbn13, bool $requireTitle = true): ?array
     {
         $response = Http::timeout(10)->get('https://www.googleapis.com/books/v1/volumes', [
@@ -119,8 +138,17 @@ class BookLookupService
         return null;
     }
 
-    private function buildPayload(?string $title, ?string $author, ?string $publisher, ?string $publishedYear, ?string $imageUrl, bool $requireTitle = true): ?array
-    {
+    /**
+     * @return BookMetadata|null
+     */
+    private function buildPayload(
+        ?string $title,
+        ?string $author,
+        ?string $publisher,
+        ?string $publishedYear,
+        ?string $imageUrl,
+        bool $requireTitle = true
+    ): ?array {
         $safeTitle = $title ? trim($title) : null;
         if ($requireTitle && !$safeTitle) {
             return null;
@@ -145,6 +173,9 @@ class BookLookupService
         return $digits;
     }
 
+    /**
+     * @param array<string, mixed>|null $volume
+     */
     private function resolveGoogleImageUrl(?array $volume): ?string
     {
         if (!$volume) {

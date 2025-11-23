@@ -12,6 +12,7 @@ use Laravel\Sanctum\HasApiTokens;
 class User extends Authenticatable
 {
     use HasApiTokens;
+    /** @phpstan-use \Illuminate\Database\Eloquent\Factories\HasFactory<\Database\Factories\UserFactory> */
     use HasFactory;
     use Notifiable;
 
@@ -49,13 +50,25 @@ class User extends Authenticatable
         'password' => 'hashed',
     ];
 
+    /**
+     * @return HasMany<UserBook, static>
+     */
     public function userBooks(): HasMany
     {
-        return $this->hasMany(UserBook::class);
+        /** @var HasMany<UserBook, static> $relation */
+        $relation = $this->hasMany(UserBook::class);
+
+        return $relation;
     }
 
+    /**
+     * @return BelongsToMany<Book, static>
+     */
     public function books(): BelongsToMany
     {
-        return $this->belongsToMany(Book::class, 'user_books')->withPivot('is_public')->withTimestamps();
+        /** @var BelongsToMany<Book, static> $relation */
+        $relation = $this->belongsToMany(Book::class, 'user_books')->withPivot('is_public')->withTimestamps();
+
+        return $relation;
     }
 }
