@@ -12,7 +12,7 @@ export type PublicBooksViewProps = {
 }
 
 export type PublicBooksViewStyle = 'cards' | 'shelf'
-export const SHELF_ROW_SIZE = 4
+export const SHELF_ROW_SIZE = 6
 
 export const summarizeBooks = (count: number): string => {
     if (count === 0) return '公開中の本はまだありません'

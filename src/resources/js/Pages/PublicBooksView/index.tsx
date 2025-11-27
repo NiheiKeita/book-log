@@ -26,7 +26,7 @@ export const PublicBooksView = (props: PageProps<PublicBooksViewProps>) => {
                             )}
                             <div>
                                 <p className="text-xs uppercase tracking-[0.35em] text-amber-600">Public Shelf</p>
-                                <h1 className="text-3xl font-bold text-slate-900">{owner.name}の公開本棚</h1>
+                                <h1 className="text-3xl font-bold text-slate-900">{owner.name}の本棚</h1>
                                 <p className="text-sm text-slate-600">{summary}</p>
                             </div>
                         </div>
