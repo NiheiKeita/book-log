@@ -52,15 +52,7 @@ export const PublicBooksView = (props: PageProps<PublicBooksViewProps>) => {
                     </p>
                 ) : viewStyle === 'shelf' ? (
                     <section className="space-y-4 rounded-2xl border border-amber-100/70 bg-white/60 p-4 shadow-inner backdrop-blur">
-                        <div className="flex items-center gap-3 px-2">
-                            <div className="h-9 w-9 rounded-full bg-gradient-to-br from-amber-200 via-rose-100 to-orange-200 text-center text-2xl leading-9">
-                                📚
-                            </div>
-                            <div>
-                                <p className="text-sm font-semibold text-amber-900">ふんわり木目の本棚</p>
-                                <p className="text-xs text-amber-800/80">お気に入りの本を飾るように、やわらかい色味の棚に並べました</p>
-                            </div>
-                        </div>
+
                         <BookShelf rows={shelfRows} />
                     </section>
                 ) : (
