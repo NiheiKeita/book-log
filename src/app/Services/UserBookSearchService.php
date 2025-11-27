@@ -8,8 +8,11 @@ use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
 class UserBookSearchService
 {
-    /**
-     * @return LengthAwarePaginator<int, UserBook>
+     /**
+     * Search user books by keyword.
+     *
+     * @return LengthAwarePaginator<int, \App\Models\UserBook>
+     * @phpstan-return LengthAwarePaginator<int, \App\Models\UserBook>
      */
     public function search(User $user, ?string $keyword = null, int $perPage = 20): LengthAwarePaginator
     {

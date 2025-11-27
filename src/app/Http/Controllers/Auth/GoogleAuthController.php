@@ -17,7 +17,7 @@ class GoogleAuthController extends Controller
 {
     public function redirect(): SymfonyRedirectResponse
     {
-        /** @var AbstractProvider $googleProvider */
+        /** @var \Laravel\Socialite\Two\AbstractProvider $googleProvider */
         $googleProvider = Socialite::driver('google');
 
         return $googleProvider->redirect();
@@ -26,7 +26,7 @@ class GoogleAuthController extends Controller
     public function callback(): LaravelRedirectResponse
     {
         try {
-            /** @var AbstractProvider $googleProvider */
+            /** @var \Laravel\Socialite\Two\AbstractProvider $googleProvider */
             $googleProvider = Socialite::driver('google');
             $googleUser = $googleProvider->stateless()->user();
         } catch (Exception $exception) {

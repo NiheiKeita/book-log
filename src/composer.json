@@ -64,6 +64,9 @@
         ],
         "vendor/bin/phpstan analyze": [
             "./vendor/bin/phpstan analyze ."
+        ],
+        "stan": [
+            "./vendor/bin/phpstan analyse"
         ]
     },
 
