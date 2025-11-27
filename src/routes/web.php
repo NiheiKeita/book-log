@@ -1,57 +1,35 @@
 <?php
 
+use App\Http\Controllers\Auth\EmailLoginController;
+use App\Http\Controllers\Auth\EmailRegisterController;
+use App\Http\Controllers\Auth\GoogleAuthController;
+use App\Http\Controllers\Books\BookRegistrationController;
+use App\Http\Controllers\Books\MyBooksController;
+use App\Http\Controllers\Books\PublicBooksController;
+use App\Http\Controllers\Books\UserBookVisibilityController;
+use App\Http\Controllers\LandingController;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Admin\AdminLoginController;
-use App\Http\Controllers\Admin\AdminDashboardController;
-use App\Http\Controllers\Admin\AdminUserController;
-use App\Http\Controllers\Admin\ImageController;
-use App\Http\Controllers\Admin\UserController;
-use App\Http\Controllers\Web\LoginController;
-use App\Http\Controllers\Web\PasswordController;
-use App\Http\Middleware\VerifyCsrfToken;
 
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| contains the "web" middleware group. Now create something great!
-|
-*/
+Route::get('/', LandingController::class)->name('top');
 
-Route::group(['middleware' => 'basicauth'], function () {
-    Route::fallback(function () {
-        return redirect(route('web.top'));
-    });
-
-    Route::middleware('guest.web')->group(function () {
-        Route::get('password/edit/{token}', [PasswordController::class, 'edit'])->name('web.password.edit');
-        Route::post('password/edit/{token}', [PasswordController::class, 'update'])->name('web.password.update');
-    });
-    Route::get('login', [LoginController::class, 'create'])->name('user.login');
-    Route::post('login', [LoginController::class, 'store']);
-
-
-    //管理画面側
-    Route::get('admin/login', [AdminLoginController::class, 'index'])->name('admin.login');
-    Route::post('admin/login', [AdminLoginController::class, 'store'])->name('admin.login');
-    Route::middleware('guest.admin')->group(function () {
-        Route::get('admin/dashboard', [AdminDashboardController::class, 'index'])->name('admin.dashboard.index');
-
-        Route::get('admin/admin_users', [AdminUserController::class, 'index'])->name('admin_user.list');
-        Route::get('admin/admin_users/add', [AdminUserController::class, 'create'])->name('admin_user.create');
-        Route::post('admin/admin_users/add', [AdminUserController::class, 'store'])->name('admin_user.store');
-
-        Route::get('admin/users', [UserController::class, 'index'])->name('user.list');
-        Route::get('admin/users/add', [UserController::class, 'create'])->name('user.create');
-        Route::post('admin/users/add', [UserController::class, 'store'])->name('user.store');
-        Route::get('admin/users/{id}', [UserController::class, 'edit'])->name('user.edit');
-        Route::post('admin/users/{id}', [UserController::class, 'update'])->name('user.update');
-    });
-
-    // API
-    Route::post('/api/upload', [ImageController::class, 'upload'])->withoutMiddleware(VerifyCsrfToken::class)->name('upload');
-    Route::post('/api/upload/ma', [ImageController::class, 'maUpload'])->withoutMiddleware(VerifyCsrfToken::class)->name('upload.ma');
+Route::middleware('guest')->group(function () {
+    Route::get('/auth/google', [GoogleAuthController::class, 'redirect'])->name('auth.google');
+    Route::get('/auth/google/callback', [GoogleAuthController::class, 'callback'])->name('auth.google.callback');
+    Route::get('/login', [EmailLoginController::class, 'create'])->name('login');
+    Route::post('/login', [EmailLoginController::class, 'store']);
+    Route::get('/register', [EmailRegisterController::class, 'create'])->name('register');
+    Route::post('/register', [EmailRegisterController::class, 'store']);
 });
+Route::post('/logout', [GoogleAuthController::class, 'logout'])->name('logout');
+
+Route::middleware('auth')->group(function () {
+    Route::get('/books/register', [BookRegistrationController::class, 'create'])->name('books.register');
+    Route::post('/books/search', [BookRegistrationController::class, 'search'])->name('books.search');
+    Route::post('/user-books', [BookRegistrationController::class, 'store'])->name('user-books.store');
+    Route::delete('/user-books/{userBook}', [BookRegistrationController::class, 'destroy'])->name('user-books.destroy');
+
+    Route::get('/me/books', [MyBooksController::class, 'index'])->name('me.books');
+    Route::patch('/user-books/{userBook}/visibility', [UserBookVisibilityController::class, 'update'])->name('user-books.visibility');
+});
+
+Route::get('/u/{user}', [PublicBooksController::class, 'show'])->name('public.books');

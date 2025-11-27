@@ -7,6 +7,7 @@ import pluginTailwindcss from "eslint-plugin-tailwindcss"
 export default [
     { files: ["**/*.{js,mjs,cjs,ts,jsx,tsx}"] },
     { languageOptions: { globals: globals.browser } },
+    { files: ["**/*.test.{ts,tsx}"], languageOptions: { globals: { ...globals.browser, ...globals.vitest } } },
     pluginJs.configs.recommended,
     ...tseslint.configs.recommended,
     pluginReact.configs.flat.recommended,

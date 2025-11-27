@@ -11,6 +11,7 @@
         "laravel-lang/lang": "^15.2",
         "laravel/framework": "^12.0",
         "laravel/sanctum": "^4.0",
+        "laravel/socialite": "^5.23",
         "laravel/tinker": "^2.8",
         "tightenco/ziggy": "^2.0",
         "zircote/swagger-php": "^4.8"
@@ -56,10 +57,16 @@
             "@php artisan key:generate --ansi"
         ],
         "phpcs": [
-          "./vendor/bin/phpcs --standard=phpcs.xml"
+          "./vendor/bin/phpcs --standard=phpcs.xml ."
         ],
         "phpcs-fix": [
-            "./vendor/bin/phpcbf --standard=phpcs.xml"
+            "./vendor/bin/phpcbf --standard=phpcs.xml ."
+        ],
+        "vendor/bin/phpstan analyze": [
+            "./vendor/bin/phpstan analyze ."
+        ],
+        "stan": [
+            "./vendor/bin/phpstan analyse"
         ]
     },
 
