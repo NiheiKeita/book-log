@@ -12,8 +12,8 @@ export const PublicBooksView = (props: PageProps<PublicBooksViewProps>) => {
         setViewStyle(event.target.value as PublicBooksViewStyle)
 
     return (
-        <main className="min-h-screen bg-gradient-to-b from-[#fff9f0] via-[#fff3e4] to-[#ffe3c2] px-4 py-10 text-slate-900">
-            <div className="mx-auto max-w-5xl space-y-8">
+        <main className="min-h-screen bg-gradient-to-b from-[#fff9f0] via-[#fff3e4] to-[#ffe3c2] px-2 py-10 text-slate-900 sm:px-4">
+            <div className="mx-auto w-full max-w-5xl space-y-8">
                 <header className="rounded-2xl border border-amber-200/80 bg-white/80 p-6 shadow-md backdrop-blur">
                     <div className="flex flex-col gap-6 md:flex-row md:items-center">
                         <div className="flex items-center gap-4">
@@ -51,8 +51,7 @@ export const PublicBooksView = (props: PageProps<PublicBooksViewProps>) => {
                         まだ公開中の本がありません。
                     </p>
                 ) : viewStyle === 'shelf' ? (
-                    <section className="space-y-4 rounded-2xl border border-amber-100/70 bg-white/60 p-4 shadow-inner backdrop-blur">
-
+                    <section className="space-y-4 rounded-2xl border border-amber-100/70 bg-white/60 p-3 shadow-inner backdrop-blur sm:p-4">
                         <BookShelf rows={shelfRows} />
                     </section>
                 ) : (

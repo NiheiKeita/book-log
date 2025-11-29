@@ -19,9 +19,9 @@ export const BookShelf = ({ rows }: Props) => (
         {rows.map((row, rowIndex) => (
             <div
                 key={rowIndex}
-                className="relative overflow-hidden rounded-2xl border border-amber-100 bg-gradient-to-b from-[#fff8ed] via-[#fff3e3] to-[#ffe6cc] p-5 shadow-[0_16px_36px_rgba(241,163,64,0.16)]"
+                className="relative overflow-hidden p-0 sm:rounded-2xl sm:border sm:border-amber-100 sm:bg-gradient-to-b sm:from-[#fff8ed] sm:via-[#fff3e3] sm:to-[#ffe6cc] sm:p-5 sm:shadow-[0_16px_36px_rgba(241,163,64,0.16)]"
             >
-                <div className="absolute inset-x-4 bottom-3 h-3 rounded-full bg-gradient-to-r from-amber-200 via-amber-300 to-amber-200 shadow-inner" />
+                <div className="absolute inset-x-2 bottom-3 hidden h-3 rounded-full bg-gradient-to-r from-amber-200 via-amber-300 to-amber-200 shadow-inner sm:inset-x-4 sm:block" />
                 <div className="relative flex flex-wrap items-end justify-center gap-4">
                     {row.map((userBook, index) => {
                         const gradient = pastelGradients[(rowIndex * SHELF_ROW_SIZE + index) % pastelGradients.length]
@@ -31,7 +31,7 @@ export const BookShelf = ({ rows }: Props) => (
                         return (
                             <div
                                 key={userBook.id}
-                                className={`group relative flex min-h-[13rem] w-28 flex-col justify-between overflow-hidden rounded-xl border border-amber-200/70 bg-gradient-to-b ${gradient} px-3 py-4 text-amber-900 shadow-md transition duration-300 hover:-translate-y-1 hover:shadow-xl sm:w-32`}
+                                className={`group relative flex flex-col justify-between h-56 basis-[48%] max-w-[9.5rem] overflow-hidden rounded-xl border border-amber-200/70 bg-gradient-to-b ${gradient} px-3 py-4 text-amber-900 shadow-md transition duration-300 hover:-translate-y-1 hover:shadow-xl sm:h-56 sm:w-32 sm:max-w-none sm:basis-auto`}
                             >
                                 <span className="absolute left-3 top-2 rounded-full bg-white/70 px-2 py-0.5 text-[10px] font-semibold text-amber-700">
                                     #{number}
