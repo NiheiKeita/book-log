@@ -31,7 +31,7 @@ export const BookShelf = ({ rows }: Props) => (
                         return (
                             <div
                                 key={userBook.id}
-                                className={`group relative flex flex-col justify-between h-56 basis-[48%] max-w-[9.5rem] overflow-hidden rounded-xl border border-amber-200/70 bg-gradient-to-b ${gradient} px-3 py-4 text-amber-900 shadow-md transition duration-300 hover:-translate-y-1 hover:shadow-xl sm:h-56 sm:w-32 sm:max-w-none sm:basis-auto`}
+                                className={`group relative flex h-56 max-w-[9.5rem] basis-[48%] flex-col justify-between overflow-hidden rounded-xl border border-amber-200/70 bg-gradient-to-b ${gradient} px-3 py-4 text-amber-900 shadow-md transition duration-300 hover:-translate-y-1 hover:shadow-xl sm:h-56 sm:w-32 sm:max-w-none sm:basis-auto`}
                             >
                                 <span className="absolute left-3 top-2 rounded-full bg-white/70 px-2 py-0.5 text-[10px] font-semibold text-amber-700">
                                     #{number}
